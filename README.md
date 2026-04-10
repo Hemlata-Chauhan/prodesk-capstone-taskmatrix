@@ -75,7 +75,7 @@ To design and develop a scalable project management tool that enables teams to m
 ## 🎨 UI Wireframes (Figma)
 
 View the design here:  
-👉 https://your-figma-link-here
+👉 https://www.figma.com/make/gLWV8LG33a8W8KdgpsS8M4/Modern-Clean-Login-Page?t=RrwwYLAAEMW2vrQX-1&preview-route=%2Flogin
 
 ---
 
