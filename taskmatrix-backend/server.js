@@ -1,9 +1,9 @@
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
-dotenv.config();
 connectDB();
 
 const app = express();
@@ -16,6 +16,14 @@ app.use("/api/auth", require("./routes/authRoutes"));
 
 // (PROTECTED ROUTE)
 app.use("/api/test", require("./routes/testRoutes"));
+
+
+const apiKey = process.env.API_KEY;
+
+app.get("/api", (req, res) => {
+  res.send(`Your API Key is: ${apiKey}`);
+});
+
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
