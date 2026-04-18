@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 
 function Register() {
+  const API_URL = process.env.REACT_APP_API_URL;
+
   const [form, setForm] = useState({
     name: "",
     email: "",
@@ -17,14 +19,15 @@ function Register() {
 
     try {
       await axios.post(
-        "http://localhost:5000/api/auth/register",
+        `${API_URL}/api/auth/register`,
         form
       );
 
       alert("Registration successful");
+      window.location.href = "/login";
 
     } catch (err) {
-      alert("Registration failed");
+      alert(err.response?.data?.message || "Registration failed");
     }
   };
 
@@ -37,19 +40,23 @@ function Register() {
           name="name"
           placeholder="Name"
           onChange={handleChange}
+          required
         />
 
         <input
           name="email"
           placeholder="Email"
           onChange={handleChange}
+          required
         />
 
         <input
           name="password"
           type="password"
           placeholder="Password"
+          value={form.password}
           onChange={handleChange}
+          required
         />
 
         <button type="submit">Register</button>

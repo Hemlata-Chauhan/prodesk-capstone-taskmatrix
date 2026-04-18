@@ -13,14 +13,15 @@ function App() {
         {/* Navigation */}
         <nav>
           <Link to="/">Login</Link> |{" "}
-          <Link to="/register">Register</Link> |{" "}
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/register">Register</Link>
         </nav>
 
         {/* Routes */}
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* Protected Route */}
            <Route
           path="/dashboard"
           element={

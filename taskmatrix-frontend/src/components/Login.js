@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 function Login() {
   const navigate = useNavigate();
+  const API_URL = process.env.REACT_APP_API_URL;
   const [form, setForm] = useState({
     email: "",
     password: ""
@@ -18,7 +19,7 @@ function Login() {
 
     try {
       const res = await axios.post(
-        "http://localhost:5000/api/auth/login",
+        `${API_URL}/api/auth/login`,
         form
       );
 
@@ -29,7 +30,7 @@ function Login() {
       navigate("/dashboard");
 
     } catch (err) {
-      alert("Login failed");
+      alert(err.response?.data?.message || "Login failed");
     }
   };
 
@@ -42,6 +43,7 @@ function Login() {
           name="email"
           placeholder="Email"
           onChange={handleChange}
+          required
         />
 
         <input
@@ -49,6 +51,7 @@ function Login() {
           type="password"
           placeholder="Password"
           onChange={handleChange}
+          required
         />
 
         <button type="submit">Login</button>
