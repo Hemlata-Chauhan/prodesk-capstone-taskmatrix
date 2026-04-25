@@ -17,6 +17,8 @@ app.use("/api/auth", require("./routes/authRoutes"));
 // (PROTECTED ROUTE)
 app.use("/api/test", require("./routes/testRoutes"));
 
+// TASK ROUTES (PROTECTED)
+app.use("/api/tasks", require("./routes/taskRoutes"));
 
 const apiKey = process.env.API_KEY;
 
@@ -25,5 +27,8 @@ app.get("/api", (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+
+
+app.use("/api/payment", require("./routes/paymentRoutes"));
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
