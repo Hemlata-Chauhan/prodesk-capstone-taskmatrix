@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import "../styles/LandingPage.css";
 
 function LandingPage() {
@@ -51,9 +52,9 @@ function LandingPage() {
       <footer>
         <p>
           © 2026 TaskMatrix |{" "}
-          <a href="#">About</a> |{" "}
-          <a href="#">Privacy</a> |{" "}
-          <a href="#">Contact</a>
+          <Link to="/about">About</Link>
+          <Link to="/privacy">Privacy</Link>
+          <Link to="/contact">Contact</Link>
         </p>
       </footer>
 

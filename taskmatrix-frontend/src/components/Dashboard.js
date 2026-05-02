@@ -4,7 +4,7 @@ import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
 
 // Stripe setup
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+//const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 function Dashboard() {
   const navigate = useNavigate();
