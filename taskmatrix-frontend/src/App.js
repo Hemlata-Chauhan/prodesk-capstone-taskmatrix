@@ -1,30 +1,26 @@
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import Dashboard from "./components/Dashboard";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Success from "./components/Success";
 import Cancel from "./components/Cancel";
+import LandingPage from "./pages/LandingPage";
 
 function App() {
   return (
     <Router>
-      <div>
-        <h1>TaskMatrix</h1>
+      <Routes>
 
-        {/* Navigation */}
-        <nav>
-          <Link to="/">Login</Link> |{" "}
-          <Link to="/register">Register</Link>
-        </nav>
+        {/* Landing Page Route */}
+        <Route path="/" element={<LandingPage />} />
 
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+        {/* Auth Pages Route */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-          {/* Protected Route */}
-           <Route
+        {/* Protected Dashboard Route */}
+        <Route
           path="/dashboard"
           element={
             <ProtectedRoute>
@@ -32,11 +28,12 @@ function App() {
             </ProtectedRoute>
           }
         />
+
         {/* Payment Routes */}
         <Route path="/success" element={<Success />} />
         <Route path="/cancel" element={<Cancel />} />
-        </Routes>
-      </div>
+
+      </Routes>
     </Router>
   );
 }

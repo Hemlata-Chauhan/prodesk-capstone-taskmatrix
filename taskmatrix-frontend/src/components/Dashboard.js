@@ -2,8 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { loadStripe } from "@stripe/stripe-js";
-// load stripe
-console.log("Stripe Key:", process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
+
+// Stripe setup
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLISHABLE_KEY);
 
 function Dashboard() {
@@ -12,11 +12,26 @@ function Dashboard() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState("");
 
+  // AI state
+  const [aiPrompt, setAiPrompt] = useState("");
+  const [aiResult, setAiResult] = useState("");
+
   const token = localStorage.getItem("token");
-  
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/");
+  };
+
+  // helper to keep headers consistent
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem("token");
+
+    return {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    };
   };
 
   // FETCH TASKS
@@ -24,18 +39,20 @@ function Dashboard() {
     try {
       const res = await axios.get(
         "http://localhost:5000/api/tasks",
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        getAuthHeaders()
       );
-      setTasks(res.data);
+
+      // supports both shapes: { data: [...] } or [...]
+      const list = Array.isArray(res.data)
+        ? res.data
+        : res.data.data || [];
+
+      setTasks(list);
     } catch (err) {
-      console.log("Error fetching tasks:", err);
+      console.log("Error fetching tasks:", err.response?.data || err.message);
     }
-  }, [token]);
-  // Call it when page loads
+  }, [token]); // eslint-disable-line
+
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
@@ -44,23 +61,32 @@ function Dashboard() {
   const addTask = async () => {
     if (!newTask.trim()) return;
 
+    console.log("Add button clicked");
+
     try {
       const res = await axios.post(
         "http://localhost:5000/api/tasks",
         { title: newTask },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        getAuthHeaders()
       );
 
-      // Update UI instantly
-      setTasks([...tasks, res.data]);
-      setNewTask("");
+      console.log("Response:", res.data);
 
+      // normalize response: either { data: task } or task
+      const createdTask = res.data.data || res.data;
+
+      // update state safely
+      setTasks((prev) => [...prev, createdTask]);
+
+      setNewTask("");
     } catch (err) {
-      console.log("Error adding task:", err);
+      if (err.response?.status === 401) {
+        alert("Session expired. Please login again.");
+        localStorage.removeItem("token");
+        navigate("/login");
+      } else {
+        console.log("Error:", err.response?.data || err.message);
+    }
     }
   };
 
@@ -69,53 +95,55 @@ function Dashboard() {
     try {
       await axios.delete(
         `http://localhost:5000/api/tasks/${id}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+        getAuthHeaders()
       );
 
-      // Remove from UI instantly
-      setTasks(tasks.filter((task) => task._id !== id));
-
+      setTasks((prev) => prev.filter((task) => task._id !== id));
     } catch (err) {
-      console.log("Error deleting task:", err);
+      console.log("Error deleting task:", err.response?.data || err.message);
     }
   };
-  // HANDLE PAYMENT
+
+  // PAYMENT
   const handlePayment = async () => {
-   console.log("Payment button clicked"); // ADD
-   try {
-    const res = await axios.post(
-      "http://localhost:5000/api/payment/create-checkout-session"
-    );
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/payment/create-checkout-session"
+      );
 
-    console.log("Session:", res.data); // ADD
-
-    // get stripe instance
-    const stripe = await stripePromise;
-    if (!stripe) {
-      console.log("Stripe failed to load");
-      return;
+      window.location.href = res.data.url;
+    } catch (err) {
+      console.log("Payment error:", err.response?.data || err.message);
     }
+  };
 
-    // redirect
-    window.location.href = res.data.url;
+  // AI
+  const getAI = async () => {
+    if (!aiPrompt.trim()) return;
 
-  } catch (err) {
-    console.log("Payment error:", err.response?.data || err.message);
-  }
-};
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/ai/suggest",
+        { prompt: aiPrompt }
+      );
+
+      setAiResult(res.data.suggestion);
+    } catch (err) {
+      console.log("AI error:", err.response?.data || err.message);
+    }
+  };
+
   return (
     <div style={{ padding: "20px" }}>
       <h2>Dashboard</h2>
+
       <button onClick={handleLogout}>Logout</button>
       <button onClick={handlePayment}>Upgrade to Pro 💳</button>
-        
+
       <hr />
 
-      {/*Add Task */}
+      {/* ADD TASK */}
+      <h3>Add Task</h3>
       <input
         value={newTask}
         onChange={(e) => setNewTask(e.target.value)}
@@ -125,7 +153,38 @@ function Dashboard() {
 
       <hr />
 
-      {/*Task List */}
+      {/* AI SECTION */}
+      <h3>AI Task Suggestions 🤖</h3>
+
+      <input
+        value={aiPrompt}
+        onChange={(e) => setAiPrompt(e.target.value)}
+        placeholder="Ask AI (e.g. give me task ideas)"
+        style={{ width: "300px", marginRight: "10px" }}
+      />
+
+      <button onClick={getAI}>Generate</button>
+
+      {aiResult && (
+        <div
+          style={{
+            marginTop: "15px",
+            padding: "10px",
+            border: "1px solid #ddd",
+            borderRadius: "5px",
+            background: "#f9fafb"
+          }}
+        >
+          <strong>AI Suggestion:</strong>
+          <p>{aiResult}</p>
+        </div>
+      )}
+
+      <hr />
+
+      {/* TASK LIST */}
+      <h3>Your Tasks</h3>
+
       {tasks.length === 0 ? (
         <p>No tasks yet</p>
       ) : (

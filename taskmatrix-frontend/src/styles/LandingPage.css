@@ -1,0 +1,125 @@
+/* ===== TaskMatrix Landing Page ===== */
+
+body {
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background: linear-gradient(to bottom, #eaf3ff, #ffffff);
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #333;
+}
+
+.landing-container {
+  padding: 20px;
+}
+
+/* Logo */
+.logo {
+  width: 160px;
+  max-width: 70%;
+  height: auto;
+  margin: 0 auto 5px;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.logo:hover {
+  transform: scale(1.05);
+}
+
+header {
+  margin-top: 10px;
+}
+
+header p {
+  margin-top: 5px;
+  font-size: 1rem;
+  color: #666;
+}
+
+/* Main */
+main {
+  margin-top: 40px;
+}
+
+main h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #222;
+}
+
+main p {
+  font-size: 1.1rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Illustration */
+.illustration {
+  width: 100%;
+  max-width: 400px;
+  margin: 20px auto;
+}
+
+/* Buttons */
+.buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.btn-primary {
+  background-color: #0078d4;
+  color: #fff;
+  border: none;
+  padding: 12px 30px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: #005fa3;
+}
+
+.btn-secondary {
+  background-color: #fff;
+  color: #0078d4;
+  border: 2px solid #0078d4;
+  padding: 12px 30px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #0078d4;
+  color: #fff;
+}
+
+/* Footer */
+footer {
+  margin-top: 60px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+footer a {
+  color: #0078d4;
+  text-decoration: none;
+  margin: 0 8px;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .buttons {
+    flex-direction: column;
+    gap: 15px;
+  }
+}

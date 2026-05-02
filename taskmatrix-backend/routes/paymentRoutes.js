@@ -31,6 +31,7 @@ router.post("/create-checkout-session", async (req, res) => {
     res.json({ url: session.url });
 
   } catch (err) {
+    console.error("STRIPE ERROR:", err); // 👈 ADD THIS
     res.status(500).json({ error: err.message });
   }
 });
