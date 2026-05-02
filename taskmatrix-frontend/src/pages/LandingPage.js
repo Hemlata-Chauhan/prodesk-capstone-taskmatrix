@@ -10,7 +10,7 @@ function LandingPage() {
       {/* 🔷 Header */}
       <header>
         <img
-          src="/taskmatrixlogo.png"
+          src="/taskmatrixlogoA.png"
           alt="TaskMatrix Logo"
           className="logo"
         />

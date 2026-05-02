@@ -26,8 +26,6 @@ function Register() {
       );
 
       alert("Registration successful");
-
-      // redirect to login
       navigate("/login");
 
     } catch (err) {
@@ -36,31 +34,38 @@ function Register() {
   };
 
   return (
-    <div style={{
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      height: "100vh",
-      background: "#f5f5f6"
-    }}>
-      <div style={{
-        width: "350px",
-        background: "white",
-        padding: "30px",
-        borderRadius: "10px",
-        boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
-      }}>
-        
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "#f5f5f6" // 🔥 gradient bg
+      }}
+    >
+      <div
+        style={{
+          width: "350px",
+          background: "white",
+          padding: "30px",
+          borderRadius: "12px",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.2)"
+        }}
+      > <img
+          src="/taskmatrixlogoB.png"
+          alt="TaskMatrix Logo"
+          style={{
+            maxWidth: "60%",   // relative to card width
+            height: "auto",
+            display: "block",
+            margin: "0 auto 15px auto"
+          }}
+        />
         {/* Branding */}
-        <h1 style={{
-          textAlign: "center",
-          color: "#0078d4",
-          marginBottom: "10px"
-        }}>
-          TaskMatrix
-        </h1>
-
-        <h2 style={{ marginBottom: "20px" }}>Create Account</h2>
+      
+        <h2 style={{ marginBottom: "20px", textAlign: "center" }}>
+          Create Account
+        </h2>
 
         <form onSubmit={handleSubmit}>
           <input
@@ -73,7 +78,7 @@ function Register() {
               padding: "12px",
               marginBottom: "10px",
               border: "1px solid #ddd",
-              borderRadius: "5px"
+              borderRadius: "6px"
             }}
           />
 
@@ -87,7 +92,7 @@ function Register() {
               padding: "12px",
               marginBottom: "10px",
               border: "1px solid #ddd",
-              borderRadius: "5px"
+              borderRadius: "6px"
             }}
           />
 
@@ -103,7 +108,7 @@ function Register() {
               padding: "12px",
               marginBottom: "15px",
               border: "1px solid #ddd",
-              borderRadius: "5px"
+              borderRadius: "6px"
             }}
           />
 
@@ -112,23 +117,26 @@ function Register() {
             style={{
               width: "100%",
               padding: "12px",
-              background: "#0078d4",
+              background: "linear-gradient(to right, #2563eb, #9333ea)", // 🔥 gradient button
               color: "white",
               border: "none",
-              borderRadius: "5px",
-              fontWeight: "bold"
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer"
             }}
           >
             Register
           </button>
         </form>
 
-        <p style={{ marginTop: "15px", fontSize: "14px" }}>
+        <p style={{ marginTop: "15px", fontSize: "14px", textAlign: "center" }}>
           Already have an account?{" "}
           <span
             onClick={() => navigate("/login")}
             style={{
-              color: "#0078d4",
+              background: "linear-gradient(to right, #2563eb, #9333ea)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
               cursor: "pointer",
               fontWeight: "bold"
             }}

@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
+import "../styles/Dashboard.css";
 //import { loadStripe } from "@stripe/stripe-js";
 
 // Stripe setup
@@ -104,6 +105,64 @@ function Dashboard() {
     }
   };
 
+  // FILTER TASKS FOR KANBAN
+  const todo = tasks.filter((t) => t.status === "todo");
+  const progress = tasks.filter((t) => t.status === "inprogress");
+  const done = tasks.filter((t) => t.status === "done");
+
+  // TASK CARD UI
+  const TaskCard = ({ task }) => (
+    <div
+      style={{
+        background: "#fff",
+        padding: "12px",
+        borderRadius: "10px",
+        marginBottom: "10px",
+        boxShadow: "0 2px 6px rgba(0,0,0,0.1)"
+      }}
+    >
+      <h4>{task.title}</h4>
+      <p style={{ fontSize: "12px", color: "#555" }}>
+        {task.description || "No description"}
+      </p>
+
+      {/* Priority badge */}
+      <span
+        style={{
+          padding: "4px 8px",
+          borderRadius: "5px",
+          fontSize: "12px",
+          background:
+            task.priority === "high"
+              ? "#ef4444"
+              : task.priority === "medium"
+                ? "#f59e0b"
+                : "#10b981",
+          color: "#fff"
+        }}
+      >
+        {task.priority || "low"}
+      </span>
+
+      <br />
+
+      <button
+        onClick={() => deleteTask(task._id)}
+        style={{
+          marginTop: "8px",
+          background: "#ef4444",
+          color: "#fff",
+          border: "none",
+          padding: "5px 10px",
+          borderRadius: "5px"
+        }}
+      >
+        Delete
+      </button>
+    </div>
+  );
+
+
   // PAYMENT
   const handlePayment = async () => {
     try {
@@ -134,79 +193,115 @@ function Dashboard() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>Dashboard</h2>
+    <div className="dashboard">
 
-      <button onClick={handleLogout}>Logout</button>
-      <button onClick={handlePayment}>Upgrade to Pro 💳</button>
+      {/* SIDEBAR */}
+      <div className="sidebar">
+        <div className="logo img"><img
+          src="/taskmatrixlogoB.png"
+          alt="TaskMatrix Logo"
+        /></div>
 
-      <hr />
+        <div className="nav-item active">Dashboard</div>
+        <div className="nav-item">My Tasks</div>
+        <div className="nav-item">Team</div>
+        <div className="nav-item">Settings</div>
 
-      {/* ADD TASK */}
-      <h3>Add Task</h3>
-      <input
-        value={newTask}
-        onChange={(e) => setNewTask(e.target.value)}
-        placeholder="Enter new task"
-      />
-      <button onClick={addTask}>Add Task</button>
+        <button onClick={handleLogout}>Logout</button>
+      </div>
 
-      <hr />
+      {/* MAIN */}
+      <div className="main">
 
-      {/* AI SECTION */}
-      <h3>AI Task Suggestions 🤖</h3>
+        {/* TOPBAR */}
+        <div className="topbar">
+          <input className="search" placeholder="Search..." />
 
-      <input
-        value={aiPrompt}
-        onChange={(e) => setAiPrompt(e.target.value)}
-        placeholder="Ask AI (e.g. give me task ideas)"
-        style={{ width: "300px", marginRight: "10px" }}
-      />
-
-      <button onClick={getAI}>Generate</button>
-
-      {aiResult && (
-        <div
-          style={{
-            marginTop: "15px",
-            padding: "10px",
-            border: "1px solid #ddd",
-            borderRadius: "5px",
-            background: "#f9fafb"
-          }}
-        >
-          <strong>AI Suggestion:</strong>
-          <p>{aiResult}</p>
-        </div>
-      )}
-
-      <hr />
-
-      {/* TASK LIST */}
-      <h3>Your Tasks</h3>
-
-      {tasks.length === 0 ? (
-        <p>No tasks yet</p>
-      ) : (
-        tasks.map((task) => (
-          <div
-            key={task._id}
-            style={{
-              border: "1px solid #ccc",
-              margin: "10px 0",
-              padding: "10px",
-              borderRadius: "5px"
-            }}
-          >
-            <h4>{task.title}</h4>
-            <p>{task.description}</p>
-
-            <button onClick={() => deleteTask(task._id)}>
-              Delete
-            </button>
+          <div className="top-icons">
+            🔔
+            👤
           </div>
-        ))
-      )}
+        </div>
+
+        {/* ADD TASK */}
+        <div className="add-task">
+          <input
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            placeholder="Enter task"
+          />
+          <button onClick={addTask}>Add</button>
+        </div>
+
+        {/* BOARD */}
+        <div className="board">
+
+          {/* TODO */}
+          <div className="column">
+            <h3>To Do</h3>
+            {tasks.filter(t => t.status === "todo").map(task => (
+              <div key={task._id} className="card">
+                <h4>{task.title}</h4>
+                <p>{task.description}</p>
+
+                <span className={`badge ${task.priority || "low"}`}>
+                  {task.priority || "low"}
+                </span>
+
+                <br />
+
+                <button
+                  className="delete-btn"
+                  onClick={() => deleteTask(task._id)}
+                >
+                  Delete
+                </button>
+              </div>
+            ))}
+          </div>
+
+          {/* IN PROGRESS */}
+          <div className="column">
+            <h3>In Progress</h3>
+            {tasks.filter(t => t.status === "inprogress").map(task => (
+              <div key={task._id} className="card">
+                <h4>{task.title}</h4>
+                <p>{task.description}</p>
+
+                <span className={`badge ${task.priority || "medium"}`}>
+                  {task.priority || "medium"}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          {/* DONE */}
+          <div className="column">
+            <h3>Done</h3>
+            {tasks.filter(t => t.status === "done").map(task => (
+              <div key={task._id} className="card">
+                <h4>{task.title}</h4>
+                <p>{task.description}</p>
+
+                <span className="badge low">done</span>
+              </div>
+            ))}
+          </div>
+
+        </div>
+        <div style={{ padding: "20px" }}>
+          <h3>AI Suggestions 🤖</h3>
+
+          <input
+            value={aiPrompt}
+            onChange={(e) => setAiPrompt(e.target.value)}
+            placeholder="Ask AI..."
+          />
+          <button onClick={getAI}>Generate</button>
+
+          {aiResult && <p>{aiResult}</p>}
+        </div>
+      </div>
     </div>
   );
 }

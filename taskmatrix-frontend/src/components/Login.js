@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 function Login() {
   const navigate = useNavigate();
   const API_URL = process.env.REACT_APP_API_URL;
+
   const [form, setForm] = useState({
     email: "",
     password: ""
@@ -23,10 +24,7 @@ function Login() {
         form
       );
 
-      // store token
       localStorage.setItem("token", res.data.token);
-
-      // redirect to dashboard
       navigate("/dashboard");
 
     } catch (err) {
@@ -35,80 +33,104 @@ function Login() {
   };
 
   return (
-  <div style={{
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "100vh",
-    background: "#f5f5f6"
-  }}>
-    <div style={{
-      width: "350px",
-      background: "white",
-      padding: "30px",
-      borderRadius: "10px",
-      boxShadow: "0 4px 10px rgba(0,0,0,0.1)"
-    }}>
-      <h2 style={{ marginBottom: "20px" }}>Login</h2>
-
-      <form onSubmit={handleSubmit}>
-        <input
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+        background: "#f5f5f6" // 🔥 gradient background
+      }}
+    >
+      <div
+        style={{
+          width: "350px",
+          background: "white",
+          padding: "30px",
+          borderRadius: "12px",
+          boxShadow: "0 8px 20px rgba(0,0,0,0.2)"
+        }}
+      > <img
+          src="/taskmatrixlogoB.png"
+          alt="TaskMatrix Logo"
           style={{
-            width: "100%",
-            padding: "12px",
-            marginBottom: "10px",
-            border: "1px solid #ddd",
-            borderRadius: "5px"
+            maxWidth: "60%",   // relative to card width
+            height: "auto",
+            display: "block",
+            margin: "0 auto 15px auto"
           }}
         />
-
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-          style={{
-            width: "100%",
-            padding: "12px",
-            marginBottom: "15px",
-            border: "1px solid #ddd",
-            borderRadius: "5px"
-          }}
-        />
-
-        <button
-          type="submit"
-          style={{
-            width: "100%",
-            padding: "12px",
-            background: "#0078d4",
-            color: "white",
-            border: "none",
-            borderRadius: "5px",
-            fontWeight: "bold"
-          }}
-        >
+        <h2
+        
+          style={{ marginBottom: "20px", textAlign: "center" }}>
           Login
-        </button>
-      </form>
+        </h2>
 
-      <p style={{ marginTop: "15px", fontSize: "14px" }}>
-        New user?{" "}
-        <span
-          onClick={() => navigate("/register")}
-          style={{ color: "#0078d4", cursor: "pointer", fontWeight: "bold" }}
-        >
-          Create account
-        </span>
-      </p>
+        <form onSubmit={handleSubmit}>
+          <input
+            name="email"
+            placeholder="Email"
+            onChange={handleChange}
+            required
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginBottom: "10px",
+              border: "1px solid #ddd",
+              borderRadius: "6px"
+            }}
+          />
+
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            onChange={handleChange}
+            required
+            style={{
+              width: "100%",
+              padding: "12px",
+              marginBottom: "15px",
+              border: "1px solid #ddd",
+              borderRadius: "6px"
+            }}
+          />
+
+          <button
+            type="submit"
+            style={{
+              width: "100%",
+              padding: "12px",
+              background: "linear-gradient(to right, #2563eb, #9333ea)", // 🔥 your gradient
+              color: "white",
+              border: "none",
+              borderRadius: "6px",
+              fontWeight: "bold",
+              cursor: "pointer"
+            }}
+          >
+            Login
+          </button>
+        </form>
+
+        <p style={{ marginTop: "15px", fontSize: "14px", textAlign: "center" }}>
+          Don't have an account?{" "}
+          <span
+            onClick={() => navigate("/register")}
+            style={{
+              background: "linear-gradient(to right, #2563eb, #9333ea)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              cursor: "pointer",
+              fontWeight: "bold"
+            }}
+          >
+            Sign up
+          </span>
+        </p>
+      </div>
     </div>
-  </div>
-);
+  );
 }
 
 export default Login;
